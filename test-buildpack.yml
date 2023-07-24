@@ -1,0 +1,12 @@
+# This is called from ./test_buildpack.
+version: "1"
+services:
+  testbuild:
+    image: "rust"
+    volumes:
+      - ".:/src"
+    working_dir: "/src"
+    environment:
+      HOME: "/src"
+    user: "$UID:$GROUPS"
+    command: ["bin/finalize", "/src/cf-buildpack-rust-actix-test", "/src/cache"]
