@@ -9,19 +9,19 @@ CACHE_DIR=${2:-}
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 VERSION=stable
 
+# Default build flags to pass to `cargo build`.
+RUST_CARGO_BUILD_PROFILE="release"
+RUST_CARGO_BUILD_FLAGS=""
+
 # Import the toolchain configuration if present
 if [ -f "$BUILD_DIR/rust-toolchain" ]
 then
   VERSION="$(cat "$BUILD_DIR/rust-toolchain")"
 fi
 
-# If your Rust code is not at the root directory of the repository, specify a
-# `BUILD_PATH` to the correct directory in the `RustConfig`
+# If your Rust code does not live in the root directory of the repository, specify the pathname in `BUILD_PATH` in the
+# `RustConfig` file
 BUILD_PATH=""
-
-# Default build flags to pass to `cargo build`.
-RUST_CARGO_BUILD_PROFILE="release"
-RUST_CARGO_BUILD_FLAGS=""
 
 # Import any cargo specific environment variables if present
 if [ -f "$BUILD_DIR/RustConfig" ]
@@ -44,11 +44,9 @@ mkdir -p "$CACHE_DIR"
 cd "$CACHE_DIR"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Make sure build tools are up to date
-# TODO: Since we're using the standard rust image, is this entirely necessary?
+# Make sure the build tools are up to date
+# The value of CARGO_HOME is predefined in this image
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-# Make sure we have an appropriate Rust toolchain installed.
 rustup self update
 rustup update "$VERSION"
 rustup default "$VERSION"
@@ -66,7 +64,7 @@ fi
 # Direct the Rust compiler output to the cache
 export CARGO_TARGET_DIR="$CACHE_DIR/target"
 
-# Build the project then copy the binary from the cache back to the source tree.
+# Build the project then copy the binary from the cache back to the source tree
 echo "-----> Building application using Cargo"
 cd "$BUILD_DIR/$BUILD_PATH"
 rm -rf target/
