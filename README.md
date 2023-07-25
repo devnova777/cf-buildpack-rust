@@ -10,10 +10,21 @@ Set the buildpack in your `manifest.yml`:
 ---
 applications:
 - name: my-cool-rust-project
-  memory: 64M
+  memory: 4096M
   buildpacks:
   - https://github.com/lighthouse-no/cf-buildpack-rust
 ```
+
+CVloud Foundry starts this application based on the coontents of a `Procfile`.
+
+In the top level of your repo, create a `Procfile` that contains the line:
+
+```Procfile
+web: ./target/release/my-cool-rust-project
+```
+
+The application name defined in the `Procfile` must match the name in `manifest.yml`.
+Also, the cargo build profile (`release` in this case) must match your configured build profile (see below).
 
 ## Rust Toolchain
 
