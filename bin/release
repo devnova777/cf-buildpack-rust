@@ -6,7 +6,7 @@ build_dir = ARGV[0]
 
 cargo_metadata = File.read("#{build_dir}/Cargo.toml").split("\n")
 
-cargo_metadata[1].match /name = \"(.*)\"/
+cargo_metadata[0].match /name = \"(.*)\"/
 app_executable = $1
 
 release_run_command = {}
