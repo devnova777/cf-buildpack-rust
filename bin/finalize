@@ -39,6 +39,11 @@ fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Install/Update Rust toolchain
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# Switch to our cache directory.
+mkdir -p "$CACHE_DIR"
+cd "$CACHE_DIR"
+
 if command -v rustup &> /dev/null
 then
   echo "-----> Checking for new releases of Rust $VERSION channel"
@@ -69,9 +74,7 @@ EOF
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 echo "-----> Building application using Cargo"
 
-# Switch to our cache directory.
-mkdir -p "$CACHE_DIR"
-cd "$CACHE_DIR"
+cd "$BUILD_DIR"
 
 # Direct the Rust compiler output to the cache
 export CARGO_TARGET_DIR="$CACHE_DIR/target"
