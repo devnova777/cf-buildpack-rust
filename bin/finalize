@@ -45,12 +45,23 @@ mkdir -p "$CACHE_DIR"
 cd "$CACHE_DIR"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Make sure the build tools are up to date
-# The value of CARGO_HOME is predefined in this image
+# Install/Update Rust toolchain
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-rustup self update
-rustup update "$VERSION"
-rustup default "$VERSION"
+if [ -d "$CARGO_HOME" ]
+then
+  echo "-----> Checking for new releases of Rust $VERSION channel"
+  # It's possible that $VERSION has changed, or the `stable` channel has updated.
+  rustup self update
+  rustup update "$VERSION"
+  rustup default "$VERSION"
+else
+  echo "-----> Downloading rustup"
+  curl https://sh.rustup.rs -sSf > rustup.sh
+  chmod u+x rustup.sh
+  echo "-----> Using rustup to install Rust channel $VERSION"
+  ./rustup.sh -y --default-toolchain "$VERSION"
+  rm rustup.sh
+fi
 
 if [ ! -x "$CARGO_HOME/bin/rustc" ]
 then
