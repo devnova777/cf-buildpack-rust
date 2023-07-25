@@ -15,16 +15,8 @@ applications:
   - https://github.com/lighthouse-no/cf-buildpack-rust
 ```
 
-Cloud Foundry starts this application based on the contents of a `Procfile`.
-
-In the top level directory of your repo, create a `Procfile` that contains the line:
-
-```Procfile
-web: ./target/release/my-cool-rust-project
-```
-
-The application name defined in the `Procfile` must match the name in `manifest.yml`.
-Also, the cargo build profile (`release` in this case) must match your configured build profile (see below).
+The `release` script in this buildpack extracts the application name from the `Cargo.toml` file.
+The Ruby script that implements this logic assumes that the `- name` property occurs immediately after `applications:` and is the second line of the file.
 
 ## Rust Toolchain
 
