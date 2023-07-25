@@ -58,25 +58,27 @@ else
   echo "-----> Downloading rustup"
   curl https://sh.rustup.rs -sSf > rustup.sh
   chmod u+x rustup.sh
-  echo "-----> Using rustup to install Rust channel $VERSION"
+  echo "-----> Using rustup to install Rust $VERSION channel"
   ./rustup.sh -y --default-toolchain "$VERSION"
   rm rustup.sh
+
+  # Ensure that at least CARGO_HOME is set correctly
   . "$HOME/.cargo/env"
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Start build process
+# Start the build process
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+cd "$BUILD_DIR/$BUILD_PATH"
+echo "-----> Building application using Cargo"
+
+# If an old target directory still exists, throw it away
+rm -rf target/
 
 # Direct the Rust compiler output to the cache
 export CARGO_TARGET_DIR="$CACHE_DIR/target"
 
 # Build the project then copy the binary from the cache back to the source tree
-# The Procfile `web` entry then points to the binary in the source tree
-echo "-----> Building application using Cargo"
-cd "$BUILD_DIR/$BUILD_PATH"
-rm -rf target/
-
 if [ -z "${RUST_CARGO_BUILD_FLAGS}" ]
 then
   cargo build --"$RUST_CARGO_BUILD_PROFILE"
