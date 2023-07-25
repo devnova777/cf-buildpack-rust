@@ -1,10 +1,10 @@
 # SAP Cloud Foundry Buildpack for Rust
 
-This buildpack uses the standard `rust` image and targets the SAP Cloud Foundry environment.
+This buildpack deploys a Rust application to the SAP Cloud Foundry environment.
 
 ## Usage
 
-Set the buildpack in your `manifest.yml`:
+In the `manifest.yml` of your application, point to this `buildpack` and allocate sufficient memory for compilation to succeed.
 
 ```yaml
 ---
@@ -15,9 +15,9 @@ applications:
   - https://github.com/lighthouse-no/cf-buildpack-rust
 ```
 
-CVloud Foundry starts this application based on the coontents of a `Procfile`.
+Cloud Foundry starts this application based on the contents of a `Procfile`.
 
-In the top level of your repo, create a `Procfile` that contains the line:
+In the top level directory of your repo, create a `Procfile` that contains the line:
 
 ```Procfile
 web: ./target/release/my-cool-rust-project
