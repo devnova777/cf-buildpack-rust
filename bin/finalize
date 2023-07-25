@@ -61,12 +61,7 @@ else
   echo "-----> Using rustup to install Rust channel $VERSION"
   ./rustup.sh -y --default-toolchain "$VERSION"
   rm rustup.sh
-fi
-
-if [ ! -x "$CARGO_HOME/bin/rustc" ]
-then
-  echo "failed: $CARGO_HOME/bin/rustc is either missing or not flagged as executable"
-  exit 1
+  . "$HOME/.cargo/env"
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
