@@ -10,8 +10,11 @@ cargo_metadata = File.read("#{build_dir}/Cargo.toml").split("\n")
 cargo_metadata[1].match /name = \"(.*)\"/
 app_executable = $1
 
+# Discover path to binary by reading target_bin_dir file
+target_bin_dir = File.read("target_bin_dir")
+
 release_run_command = {}
-release_run_command['default_process_types'] = {'web' => app_executable}
+release_run_command['default_process_types'] = {'web' => target_bin_dir + "/" + app_executable}
 
 # Tell CF how to start this program
 puts release_run_command.to_yaml
