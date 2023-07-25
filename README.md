@@ -66,3 +66,6 @@ Therefore, you should not specify the Rust build profile in `RUST_CARGO_BUILD_FL
 
 Changes to the buildpack can be tested using the included shell script `test-buildpack.sh`.
 This uses the standard `rust` Docker image.
+
+-----
+&copy; 2023 Lighthouse Consulting AS
