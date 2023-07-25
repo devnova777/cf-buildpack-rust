@@ -1,6 +1,6 @@
-# Cloud Foundry Buildpack for Rust
+# SAP Cloud Foundry Buildpack for Rust
 
-This buildpack uses the standard `rust` image.
+This buildpack uses the standard `rust` image and targets the SAP Cloud Foundry environment.
 
 ## Usage
 
@@ -27,7 +27,7 @@ $ cat rust-toolchain
 nightly
 ```
 
-If present, the `rust-toolchain` file should contain only this single value.
+If present, the `rust-toolchain` file should contain only a single value.
 
 See [`Rust toolchains`](https://rust-lang.github.io/rustup/concepts/toolchains.html) for more details about Rust channels.
 
