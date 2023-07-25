@@ -76,9 +76,11 @@ echo "-----> Building application using Cargo"
 rm -rf target/
 mkdir target/
 
-# Write final target director to the target_bin_dir file
+# Write final target directory to the target_bin_dir file
 # The release script can then discover the path to the executable by reading this file
-echo "target/$RUST_CARGO_BUILD_PROFILE" > ./target_bin_dir
+cat <<EOF > target_bin_dir
+"target/$RUST_CARGO_BUILD_PROFILE"
+EOF
 
 # Direct the Rust compiler output to the cache
 export CARGO_TARGET_DIR="$CACHE_DIR/target"
