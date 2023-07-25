@@ -78,7 +78,7 @@ mkdir target/
 
 # Write final target director to the target_bin_dir file
 # The release script can then discover the path to the executable by reading this file
-cat "target/$RUST_CARGO_BUILD_PROFILE" > ./target_bin_dir
+echo "target/$RUST_CARGO_BUILD_PROFILE" > ./target_bin_dir
 
 # Direct the Rust compiler output to the cache
 export CARGO_TARGET_DIR="$CACHE_DIR/target"
