@@ -5,7 +5,6 @@ require 'yaml'
 build_dir = ARGV[0]
 
 cargo_metadata = File.read("#{build_dir}/Cargo.toml").split("\n")
-puts cargo_metadata
 
 cargo_metadata[1].match /name = \"(.*)\"/
 app_executable = $1
