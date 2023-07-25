@@ -47,7 +47,7 @@ cd "$CACHE_DIR"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Install/Update Rust toolchain
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-if [ -d "$CARGO_HOME" ]
+if command -v rustup &> /dev/null
 then
   echo "-----> Checking for new releases of Rust $VERSION channel"
   # It's possible that $VERSION has changed, or the `stable` channel has updated.
