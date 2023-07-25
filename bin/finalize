@@ -20,10 +20,6 @@ then
   VERSION="$(cat "$BUILD_DIR/rust-toolchain")"
 fi
 
-# If your Rust code does not live in the root directory of the repository, specify the pathname in `BUILD_PATH` in the
-# `RustConfig` file
-BUILD_PATH=""
-
 # Import any cargo specific environment variables if present
 if [ -f "$BUILD_DIR/RustConfig" ]
 then
@@ -39,10 +35,6 @@ then
   >&2 echo "failed: Value for Rust VERSION missing or empty.  Correct this setting in either the rust-toolchain or the RustConfig file"
   exit 1
 fi
-
-# Switch to our cache directory.
-mkdir -p "$CACHE_DIR"
-cd "$CACHE_DIR"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Install/Update Rust toolchain
@@ -66,22 +58,20 @@ else
   . "$HOME/.cargo/env"
 fi
 
+# Write final target directory to the target_bin_dir file
+# The release script can then discover the path to the executable by reading this file
+cat <<EOF > "$BUILD_DIR/target_bin_dir"
+"target/$RUST_CARGO_BUILD_PROFILE"
+EOF
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Start the build process
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-cd "$BUILD_DIR/$BUILD_PATH"
 echo "-----> Building application using Cargo"
 
-# If an old target directory still exists, throw it away
-rm -rf target/
-mkdir target/
-
-# Write final target directory to the target_bin_dir file
-# The release script can then discover the path to the executable by reading this file
-touch target_bin_dir
-cat <<EOF > target_bin_dir
-"target/$RUST_CARGO_BUILD_PROFILE"
-EOF
+# Switch to our cache directory.
+mkdir -p "$CACHE_DIR"
+cd "$CACHE_DIR"
 
 # Direct the Rust compiler output to the cache
 export CARGO_TARGET_DIR="$CACHE_DIR/target"
