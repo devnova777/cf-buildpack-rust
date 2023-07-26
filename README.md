@@ -22,7 +22,7 @@ When defining the `Cargo.toml` file for your application, make sure the `name` p
 name = "my-cool-rust-app"
 version = "0.1.0"
 authors = ["Chris Whealy <chris@lighthouse.no>"]
-edition = "2018"
+edition = "2021"
 
 ...
 ```
