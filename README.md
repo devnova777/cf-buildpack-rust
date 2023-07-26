@@ -29,9 +29,10 @@ edition = "2021"
 
 This is because the `release` phase of this buildpack assumes that the `name` property exists on this line.
 
-## Rust Toolchain
+## Configuring the Rust Toolchain
 
 In the vast majority of cases, you will want your application built using the `stable` Rust channel.
+If this is the case, then no explicit configuration is needed.
 
 However, should you wish to use either the `nightly` channel, or pin your application to a specific Rust version, then create a file called `rust-toolchain` in your repo's top level directory containing the specific toolchain name you wish to use.
 For example:
@@ -41,11 +42,11 @@ $ cat rust-toolchain
 nightly
 ```
 
-If present, the `rust-toolchain` file should contain only a single value.
+If the `rust-toolchain` file exists, it should only contain a single value.
 
 See [`Rust toolchains`](https://rust-lang.github.io/rustup/concepts/toolchains.html) for more details about Rust channels.
 
-## Cargo Environment Variables
+## Configuring Cargo Environment Variables
 
 Any environment variables used by `cargo` can be defined in a file called `RustConfig` in your repo's top level directory.
 For instance:
@@ -63,8 +64,7 @@ The `RustConfig` file may also contain additional variables used by this buildpa
 
 | `RustConfig` Variable | Default Value | Description
 |---|---|---
-| `VERSION` | `"stable"` | Change this value if you want to use the nightly build or a specific Rust version.<br>***IMPORTANT***<br>If a value of `VERSION` is define here, it will override the value in `rust-toolchain`.
-| `BUILD_PATH` | `""` | If your source code is not in the top-level directory of your repo, define the pathname in this variable
+| `VERSION` | `"stable"` | Change this value if you want to use the nightly build or a specific Rust version.<br>***IMPORTANT***<br>If `VERSION` is define here, then it will override the value in `rust-toolchain`.
 | `RUST_CARGO_BUILD_PROFILE` | `"release"` | Rust build profile
 | `RUST_CARGO_BUILD_FLAGS` | `""` | Optional build flags.<br>For example `"-p some_package --bin some_binary --bin some_other_binary"`
 
