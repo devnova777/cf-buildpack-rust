@@ -15,8 +15,19 @@ applications:
   - https://github.com/lighthouse-no/cf-buildpack-rust
 ```
 
-The `release` phase of this buildpack is a Ruby script that extracts the application name from the `- name` property in the `Cargo.toml` file.
-The assumption is made that this value occurs immediately after `applications:` on the second line of the file.
+When defining the `Cargo.toml` file for your application, make sure the `name` property is listed immediately after the `[package]` section on line 2 of the file.
+
+```toml
+[package]
+name = "my-cool-rust-app"
+version = "0.1.0"
+authors = ["Chris Whealy <chris@lighthouse.no>"]
+edition = "2018"
+
+...
+```
+
+This is because the `release` phase of this buildpack assumes that the `name` property exists on this line.
 
 ## Rust Toolchain
 
