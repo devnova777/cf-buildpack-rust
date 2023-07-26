@@ -1,4 +1,5 @@
 #!/bin/bash
+# bin/detect <build-dir>
 
 # Assume success
 EXIT_CODE=0
