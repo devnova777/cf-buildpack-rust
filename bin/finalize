@@ -66,12 +66,14 @@ echo target/$RUST_CARGO_BUILD_PROFILE > "$BUILD_DIR/target_bin_dir"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Start the build process
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-echo "-----> Building application using Cargo"
-
 cd "$BUILD_DIR"
 
 # Direct the Rust compiler output to the cache
 export CARGO_TARGET_DIR="$CACHE_DIR/target"
+
+echo "-----> Building application using Cargo"
+echo "----->        Build Directory = $BUILD_DIR"
+echo "-----> Cargo Target Directory = $CARGO_TARGET_DIR"
 
 # Build the project then copy the binary from the cache back to the source tree
 if [ -z "${RUST_CARGO_BUILD_FLAGS}" ]
