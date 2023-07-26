@@ -58,6 +58,9 @@ RUST_BACKTRACE=full
 RUST_LOG=warn
 ```
 
+***WARNING***<br>
+Do not set your own value for `CARGO_TARGET_DIR` as the buildpack's `finalize` phase defines its own value for this variable.
+
 See [Rust Environment Variables](https://rust-lang.github.io/rustup/environment-variables.html) for more details.
 
 The `RustConfig` file may also contain additional variables used by this buildpack:
