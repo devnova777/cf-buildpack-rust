@@ -2,6 +2,13 @@
 
 This buildpack deploys a Rust application to the SAP Cloud Foundry environment.
 
+## Assumptions
+
+The objective of this buildpack is to compile your Rust program such that it will run as an application in your Cloud Foundry space.
+Consequently, your `Cargo.toml` file should specify a single package that compiles to a single binary.
+
+Adding configuration to `Cargo.toml` that causes `cargo build` to create multiple binaries will not have the desired outcome, because the `release` phase of this buildpack must supply Cloud Foundry with the name of the single binary to be executed &mdash; and that binary is identified by the package name.
+
 ## Usage
 
 In the `manifest.yml` of your application, point to this `buildpack` and allocate sufficient memory for compilation to succeed.
@@ -61,7 +68,7 @@ RUST_LOG=warn
 ***WARNING***<br>
 Do not set your own value for `CARGO_TARGET_DIR` as the buildpack's `finalize` phase defines its own value for this variable.
 
-See [Rust Environment Variables](https://rust-lang.github.io/rustup/environment-variables.html) for more details.
+See [Rust Environment Variables](https://doc.rust-lang.org/cargo/reference/environment-variables.html) for more details.
 
 The `RustConfig` file may also contain additional variables used by this buildpack:
 
@@ -69,7 +76,7 @@ The `RustConfig` file may also contain additional variables used by this buildpa
 |---|---|---
 | `VERSION` | `"stable"` | Change this value if you want to use the nightly build or a specific Rust version.<br>***IMPORTANT***<br>If `VERSION` is define here, then it will override the value in `rust-toolchain`.
 | `RUST_CARGO_BUILD_PROFILE` | `"release"` | Rust build profile
-| `RUST_CARGO_BUILD_FLAGS` | `""` | Optional build flags.<br>For example `"-p some_package --bin some_binary --bin some_other_binary"`
+| `RUST_CARGO_BUILD_FLAGS` | `""` | Optional build flags.<br>For example `"--features feature1 feature2"`
 
 The `cargo build` command will then be issued using the pattern:
 
