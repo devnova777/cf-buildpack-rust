@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# usage: bin/supply <build-dir> <cache-dir> <env-dir>
+
+echo "-----> Start supply"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Install/Update Rust toolchain
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+VERSION=stable
+
+# Import the toolchain configuration if present
+if [ -f "$BUILD_DIR/rust-toolchain" ]
+then
+  VERSION="$(cat "$BUILD_DIR/rust-toolchain")"
+fi
+
+# Check our configuration options.
+if [ -z ${VERSION+x} ]
+then
+  >&2 echo "failed: Value for Rust VERSION missing or empty.  Use the 'rust-toolchain' file to define a non-default value or delete this file to use the default 'stable' channel"
+  exit 1
+fi
+
+if command -v rustup &> /dev/null
+then
+  echo "-----> Checking for new releases of Rust $VERSION channel"
+  # It's possible that $VERSION has changed, or the `stable` channel has been updated.
+  rustup self update
+  rustup update "$VERSION"
+  rustup default "$VERSION"
+else
+  echo "-----> Downloading rustup"
+  curl https://sh.rustup.rs -sSf > rustup.sh
+  chmod u+x rustup.sh
+  echo "-----> Using rustup to install Rust $VERSION channel"
+  ./rustup.sh -y --default-toolchain "$VERSION"
+  rm rustup.sh
+fi
+
+echo "<----- End supply"
