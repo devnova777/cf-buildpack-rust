@@ -5,60 +5,26 @@ BUILD_DIR=${1:-}
 CACHE_DIR=${2:-}
 # ENV_DIR=${3:-}   At the moment, we don't need this argument value...
 
+# Throw toys out of pram if any command fails or a variable is unset
+set -eu
+
 echo "-----> Start finalize"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Rust Build Settings
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-VERSION=stable
+
+# Ensure that at least CARGO_HOME is set correctly
+. "$HOME/.cargo/env"
 
 # Default build flags to pass to `cargo build`.
 RUST_CARGO_BUILD_PROFILE="release"
 RUST_CARGO_BUILD_FLAGS=""
 
-# Import the toolchain configuration if present
-if [ -f "$BUILD_DIR/rust-toolchain" ]
-then
-  VERSION="$(cat "$BUILD_DIR/rust-toolchain")"
-fi
-
 # Import any cargo specific environment variables if present
 if [ -f "$BUILD_DIR/RustConfig" ]
 then
   . "$BUILD_DIR/RustConfig"
-fi
-
-# Throw toys out of pram if any command fails or a variable is unset
-set -eu
-
-# Check our configuration options.
-if [ -z ${VERSION+x} ]
-then
-  >&2 echo "failed: Value for Rust VERSION missing or empty.  Correct this setting in either the rust-toolchain or the RustConfig file"
-  exit 1
-fi
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Install/Update Rust toolchain
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-if command -v rustup &> /dev/null
-then
-  echo "-----> Checking for new releases of Rust $VERSION channel"
-  # It's possible that $VERSION has changed, or the `stable` channel has updated.
-  rustup self update
-  rustup update "$VERSION"
-  rustup default "$VERSION"
-else
-  echo "-----> Downloading rustup"
-  curl https://sh.rustup.rs -sSf > rustup.sh
-  chmod u+x rustup.sh
-  echo "-----> Using rustup to install Rust $VERSION channel"
-  ./rustup.sh -y --default-toolchain "$VERSION"
-  rm rustup.sh
-
-  # Ensure that at least CARGO_HOME is set correctly
-  . "$HOME/.cargo/env"
 fi
 
 # Write final target directory to the target_bin_dir file
@@ -87,8 +53,9 @@ fi
 
 mkdir -p target/"$RUST_CARGO_BUILD_PROFILE"
 
-# macos equivalent find command - only for testing
+# find command for macos testing only
 # find "$CARGO_TARGET_DIR/$RUST_CARGO_BUILD_PROFILE" -maxdepth 1 -type f -perm +111 -exec cp -a {} target/"$RUST_CARGO_BUILD_PROFILE" \;
+
 find "$CARGO_TARGET_DIR/$RUST_CARGO_BUILD_PROFILE" -maxdepth 1 -type f -executable -exec cp -a -t target/"$RUST_CARGO_BUILD_PROFILE" {} \;
 
 echo "<----- End finalize"

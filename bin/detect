@@ -4,9 +4,7 @@
 # Assume success
 EXIT_CODE=0
 
-if [ -f "$1/RustConfig" ] ||
-   [ -f "$1/rust-toolchain" ] ||
-   [ -f "$1/Cargo.toml" ]
+if [ -f "$1/Cargo.toml" ]
 then
   echo "Rust"
 else

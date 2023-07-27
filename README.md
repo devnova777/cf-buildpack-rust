@@ -9,6 +9,15 @@ Consequently, your `Cargo.toml` file should specify a single package that compil
 
 Adding configuration to `Cargo.toml` that causes `cargo build` to create multiple binaries will not have the desired outcome, because the `release` phase of this buildpack must supply Cloud Foundry with the name of the single binary to be executed &mdash; and that binary is identified by the package name.
 
+## Build Phases
+
+This buildpack uses all 4 standard phases:
+
+1. `detect`<br>If the file `Cargo.toml` exists in the build directory, the string `Rust` is returned with an exit code of `0`, else exit code `1` is returned and no further build phases are performed.
+1. `supply`<br>Installs or updates the version of the Rust toolchain defined in file `rust-toolchain`.<br>If this file is missing, the default value of `stable` is used.
+1. `finalize`<br>Runs `cargo build` using any additional build settings found in the file `RustConfig`.<br>If this file is missing or empty, it simply runs `cargo build --release`
+1. `release`<br>Returns a YAML string that points Cloud Foundry to the compiled binary.
+
 ## Usage
 
 In the `manifest.yml` of your application, point to this `buildpack` and allocate sufficient memory for compilation to succeed.
@@ -30,11 +39,10 @@ name = "my-cool-rust-app"
 version = "0.1.0"
 authors = ["Chris Whealy <chris@lighthouse.no>"]
 edition = "2021"
-
 ...
 ```
 
-This is because the `release` phase of this buildpack assumes that the `name` property exists on this line.
+The `release` phase assumes that the compiled binary can be identified using the package `name`, and that this property exists on line 2 of the file.
 
 ## Configuring the Rust Toolchain
 
@@ -74,7 +82,7 @@ The `RustConfig` file may also contain additional variables used by this buildpa
 
 | `RustConfig` Variable | Default Value | Description
 |---|---|---
-| `VERSION` | `"stable"` | Change this value if you want to use the nightly build or a specific Rust version.<br>***IMPORTANT***<br>If `VERSION` is define here, then it will override the value in `rust-toolchain`.
+| `VERSION` | `"stable"` | ***IMPORTANT***<br>It is somewhat redundant to define a value of `VERSION` here, as any non-default value for this variable would be defined in the file `rust-toolchain`.<br>If you do define `VERSION` here, then this value will override any value found in `rust-toolchain`.
 | `RUST_CARGO_BUILD_PROFILE` | `"release"` | Rust build profile
 | `RUST_CARGO_BUILD_FLAGS` | `""` | Optional build flags.<br>For example `"--features feature1 feature2"`
 
