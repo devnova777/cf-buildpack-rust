@@ -51,23 +51,33 @@ cd "$BUILD_DIR"
 # Direct the Rust compiler output to the cache
 export CARGO_TARGET_DIR="$CACHE_DIR/target"
 
+# Use the correct profile arg format
+CARGO_PROFILE_ARG="--release"
+TARGET_BIN_DIR="release"
+
+if [ "$RUST_CARGO_BUILD_PROFILE" != "release" ]
+then
+  CARGO_PROFILE_ARG="--profile $RUST_CARGO_BUILD_PROFILE"
+  TARGET_BIN_DIR=debug
+fi
+
 # Build the project
-printf  "%s Building application: cargo build --profile %s %s\n" "$PHASE_STEP" "$RUST_CARGO_BUILD_PROFILE" "$RUST_CARGO_BUILD_FLAGS"
+printf  "%s Building application: cargo build %s %s\n" "$PHASE_STEP" "$CARGO_PROFILE_ARG" "$RUST_CARGO_BUILD_FLAGS"
 
 if [ -z "${RUST_CARGO_BUILD_FLAGS}" ]
 then
-  cargo build --profile "$RUST_CARGO_BUILD_PROFILE"
+  cargo build "$CARGO_PROFILE_ARG"
 else
-  cargo build --profile "$RUST_CARGO_BUILD_PROFILE" "$RUST_CARGO_BUILD_FLAGS"
+  cargo build "$CARGO_PROFILE_ARG" "$RUST_CARGO_BUILD_FLAGS"
 fi
 
 ls -al "$CARGO_TARGET_DIR"
 
 # Copy the binary from the cache back to the expected target directory
 mkdir -p target/"$RUST_CARGO_BUILD_PROFILE"
-find "$CARGO_TARGET_DIR/$RUST_CARGO_BUILD_PROFILE" -maxdepth 1 -type f -executable -exec cp -a -t target/"$RUST_CARGO_BUILD_PROFILE" {} \;
+find "$CARGO_TARGET_DIR/$TARGET_BIN_DIR" -maxdepth 1 -type f -executable -exec cp -a -t target/"$RUST_CARGO_BUILD_PROFILE" {} \;
 
 # macos version of find command for local testing only
-# find "$CARGO_TARGET_DIR/$RUST_CARGO_BUILD_PROFILE" -maxdepth 1 -type f -perm +111 -exec cp -a {} target/"$RUST_CARGO_BUILD_PROFILE" \;
+# find "$CARGO_TARGET_DIR/$TARGET_BIN_DIR" -maxdepth 1 -type f -perm +111 -exec cp -a {} target/"$RUST_CARGO_BUILD_PROFILE" \;
 
 printf "%s End finalize\n" "$EXIT_PHASE"
