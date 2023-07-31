@@ -23,6 +23,8 @@ This buildpack uses all 4 standard phases:
 
 ## Usage
 
+### `manifest.yml`
+
 In the `manifest.yml` of your application, point to this `buildpack` and allocate sufficient memory for compilation to succeed.
 
 ```yaml
@@ -34,7 +36,9 @@ applications:
   - https://github.com/lighthouse-no/cf-buildpack-rust
 ```
 
-When defining the `Cargo.toml` file for your application, make sure the `name` property is listed immediately after the `[package]` section on line 2 of the file.
+### `Cargo.toml`
+
+In your application's `Cargo.toml` file, make sure the `name` property is listed immediately after the `[package]` section on line 2 of the file.
 
 ```toml
 [package]
@@ -45,7 +49,7 @@ edition = "2021"
 
 ```
 
-The buildpack's `release` phase assumes that the compiled binary can be identified using value of the `name` property found immediately after the `[package]` section on line 2 of `Cargo.toml`.
+This is because the buildpack's `release` phase assumes that the `name` property can be found exactly on line 2.
 
 ## Configuring the Rust Toolchain
 
@@ -94,7 +98,7 @@ The `cargo build` command will then be issued using the pattern:
 cargo build --$RUST_CARGO_BUILD_PROFILE $RUST_CARGO_BUILD_FLAGS
 ```
 
-Therefore, you should not specify the Rust build profile in `RUST_CARGO_BUILD_FLAGS`.
+Therefore, although is would be possible to specify the Rust build profile in `RUST_CARGO_BUILD_FLAGS`, this should not be done as it will create a conflicted set of arguments and `cargo` will fail.
 
 ## Testing with Docker
 
