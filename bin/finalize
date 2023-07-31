@@ -66,12 +66,13 @@ printf  "%s Building application: cargo build %s %s\n" "$PHASE_STEP" "$CARGO_PRO
 
 if [ -z "${RUST_CARGO_BUILD_FLAGS}" ]
 then
+  # Do not enclose the argument variables in double quotes - we need word splitting here!
+  # shellcheck disable=SC2086
   cargo build $CARGO_PROFILE_ARG
 else
-  cargo build $CARGO_PROFILE_ARG "$RUST_CARGO_BUILD_FLAGS"
+  # shellcheck disable=SC2086
+  cargo build $CARGO_PROFILE_ARG $RUST_CARGO_BUILD_FLAGS
 fi
-
-ls -al "$CARGO_TARGET_DIR/$TARGET_BIN_DIR"
 
 # Copy the binary from the cache back to the expected target directory
 mkdir -p target/"$RUST_CARGO_BUILD_PROFILE"
