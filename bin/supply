@@ -7,7 +7,7 @@ BUILD_DIR=${1:-}
 
 CONFIG_FILE=RustToolchain
 ENTER_PHASE='----->'
-PHASE_STEP=' . . .'
+PHASE_STEP='......'
 EXIT_PHASE='<-----'
 
 printf "%s Start supply\n" $ENTER_PHASE
