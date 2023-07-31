@@ -1,6 +1,9 @@
 # SAP Cloud Foundry Buildpack for Rust
 
-This buildpack deploys a Rust application to the SAP Cloud Foundry environment.
+This buildpack deploys a Rust application to a Cloud Foundry environment.
+
+Although this buildpack was developed specifically for the deployment of Rust programs to an SAP Cloud Foundry environment, it does not contain any SAP-specific dependencies.
+Therefore, it should be suitable for deploying a Rust program to ***any*** Cloud Foundry environment; however, this aspect has not been tested.
 
 ## Assumptions
 
@@ -14,7 +17,7 @@ Adding configuration to `Cargo.toml` that causes `cargo build` to create multipl
 This buildpack uses all 4 standard phases:
 
 1. `detect`<br>If the file `Cargo.toml` exists in the build directory, the string `Rust` is returned with an exit code of `0`, else exit code `1` is returned and no further build phases are performed.
-1. `supply`<br>Installs or updates the version of the Rust toolchain defined in file `rust-toolchain`.<br>If this file is missing, the default value of `stable` is used.
+1. `supply`<br>Installs or updates the version of the Rust toolchain defined in file `RustToolchain`.<br>If this file is missing, the default value of `stable` is used.
 1. `finalize`<br>Runs `cargo build` using any additional build settings found in the file `RustConfig`.<br>If this file is missing or empty, it simply runs `cargo build --release`
 1. `release`<br>Returns a YAML string that points Cloud Foundry to the compiled binary.
 
@@ -39,25 +42,25 @@ name = "my-cool-rust-app"
 version = "0.1.0"
 authors = ["Chris Whealy <chris@lighthouse.no>"]
 edition = "2021"
-...
+
 ```
 
-The `release` phase assumes that the compiled binary can be identified using the package `name`, and that this property exists on line 2 of the file.
+The buildpack's `release` phase assumes that the compiled binary can be identified using value of the `name` property found immediately after the `[package]` section on line 2 of `Cargo.toml`.
 
 ## Configuring the Rust Toolchain
 
 In the vast majority of cases, you will want your application built using the `stable` Rust channel.
 If this is the case, then no explicit configuration is needed.
 
-However, should you wish to use either the `nightly` channel, or pin your application to a specific Rust version, then create a file called `rust-toolchain` in your repo's top level directory containing the specific toolchain name you wish to use.
+However, should you wish to use either the `nightly` channel, or pin your application to a specific Rust version, then create a file called `RustToolchain` in your repo's top level directory containing the specific toolchain name you wish to use.
 For example:
 
 ```sh
-$ cat rust-toolchain
+$ cat RustToolchain
 nightly
 ```
 
-If the `rust-toolchain` file exists, it should only contain a single value.
+If the `RustToolchain` file exists, it should only contain a single value.
 
 See [`Rust toolchains`](https://rust-lang.github.io/rustup/concepts/toolchains.html) for more details about Rust channels.
 
@@ -82,7 +85,6 @@ The `RustConfig` file may also contain additional variables used by this buildpa
 
 | `RustConfig` Variable | Default Value | Description
 |---|---|---
-| `VERSION` | `"stable"` | ***IMPORTANT***<br>It is somewhat redundant to define a value of `VERSION` here, as any non-default value for this variable would be defined in the file `rust-toolchain`.<br>If you do define `VERSION` here, then this value will override any value found in `rust-toolchain`.
 | `RUST_CARGO_BUILD_PROFILE` | `"release"` | Rust build profile
 | `RUST_CARGO_BUILD_FLAGS` | `""` | Optional build flags.<br>For example `"--features feature1 feature2"`
 
