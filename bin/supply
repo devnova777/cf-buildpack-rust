@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 # usage: bin/supply <build-dir> <cache-dir> <env-dir>
 
+BUILD_DIR=${1:-}
+# CACHE_DIR=${2:-}
+# ENV_DIR=${3:-}
+
 echo "-----> Start supply"
 CONFIG_FILE=RustToolchain
 
