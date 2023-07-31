@@ -52,7 +52,7 @@ cd "$BUILD_DIR"
 export CARGO_TARGET_DIR="$CACHE_DIR/target"
 
 # Build the project
-printf  "%s Building application: cargo build --%s %s\n" "$PHASE_STEP" "$RUST_CARGO_BUILD_PROFILE" "$RUST_CARGO_BUILD_FLAGS"
+printf  "%s Building application: cargo build --profile %s %s\n" "$PHASE_STEP" "$RUST_CARGO_BUILD_PROFILE" "$RUST_CARGO_BUILD_FLAGS"
 
 if [ -z "${RUST_CARGO_BUILD_FLAGS}" ]
 then
