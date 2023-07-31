@@ -13,18 +13,18 @@ CONFIG_FILE=RustToolchain
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 VERSION=stable
 
-# Import the toolchain configuration if present
+# Pickup channel version from toolchain configuration file if present
 if [ -f "$BUILD_DIR/$CONFIG_FILE" ]
 then
-  VERSION="$(cat "$BUILD_DIR/$CONFIG_FILE")"
+  if [ -s "$BUILD_DIR/$CONFIG_FILE" ]
+  then
+    VERSION="$(cat "$BUILD_DIR/$CONFIG_FILE")"
+  else
+    printf "-----> Ignoring empty toolchain configuration file %s\n" $CONFIG_FILE
+  fi
 fi
 
-# Check our configuration options.
-if [ -z "$VERSION" ]
-then
-  >&2 printf "failed: Rust VERSION is empty.\nTo use a version other than the Rust stable channel, add the desired version or 'nightly' to the file %s\n" $CONFIG_FILE
-  exit 1
-fi
+echo "-----> Using Rust $VERSION channel"
 
 if command -v rustup &> /dev/null
 then
