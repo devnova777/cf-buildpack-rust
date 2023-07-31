@@ -13,8 +13,6 @@ CONFIG_FILE=RustToolchain
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 VERSION=stable
 
-ls -al "$BUILD_DIR"
-
 # Import the toolchain configuration if present
 if [ -f "$BUILD_DIR/$CONFIG_FILE" ]
 then
@@ -24,7 +22,7 @@ fi
 # Check our configuration options.
 if [ -z "$VERSION" ]
 then
-  >&2 printf "failed: Rust VERSION is empty.\nTo use a version other than the Rust stable channel, add the desired version or 'nightly' to the file %s" $CONFIG_FILE
+  >&2 printf "failed: Rust VERSION is empty.\nTo use a version other than the Rust stable channel, add the desired version or 'nightly' to the file %s\n" $CONFIG_FILE
   exit 1
 fi
 
