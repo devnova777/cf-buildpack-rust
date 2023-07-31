@@ -16,7 +16,7 @@ then
 fi
 
 # Check our configuration options.
-if [ -z ${VERSION+x} ]
+if [ -z "$VERSION" ]
 then
   >&2 printf "failed: Rust VERSION is empty.\nTo use a version other than the Rust stable channel, add the desired version or 'nightly' to the file %s" $CONFIG_FILE
   exit 1
