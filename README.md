@@ -91,7 +91,7 @@ Do not set your own value for `CARGO_TARGET_DIR` as the buildpack's `finalize` p
 
 | `RustConfig` Variable | Default Value | Description
 |---|---|---
-| `RUST_CARGO_BUILD_PROFILE` | `"release"` | Rust build profile
+| `RUST_CARGO_BUILD_PROFILE` | `release` | Rust build profile
 | `RUST_CARGO_BUILD_FLAGS` | `""` | Optional build flags.<br>For example `"--features feature1 feature2"`
 
 See [Rust Environment Variables](https://doc.rust-lang.org/cargo/reference/environment-variables.html) for more details.
