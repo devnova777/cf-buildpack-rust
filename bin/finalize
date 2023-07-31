@@ -3,7 +3,9 @@
 
 BUILD_DIR=${1:-}
 CACHE_DIR=${2:-}
-# ENV_DIR=${3:-}   At the moment, we don't need this argument value...
+# ENV_DIR=${3:-}
+
+CONFIG_FILE=RustConfig
 
 # Throw toys out of pram if any command fails or a variable is unset
 set -eu
@@ -22,9 +24,9 @@ RUST_CARGO_BUILD_PROFILE="release"
 RUST_CARGO_BUILD_FLAGS=""
 
 # Import any cargo specific environment variables if present
-if [ -f "$BUILD_DIR/RustConfig" ]
+if [ -f "$BUILD_DIR/$CONFIG_FILE" ]
 then
-  . "$BUILD_DIR/RustConfig"
+  . "$BUILD_DIR/$CONFIG_FILE"
 fi
 
 # Write final target directory to the target_bin_dir file
