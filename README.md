@@ -64,7 +64,8 @@ $ cat RustToolchain
 nightly
 ```
 
-If the `RustToolchain` file exists, it should only contain a single value.
+If the `RustToolchain` file exists but is empty, it will be ignored.
+You should only add a single value to this file.
 
 See [`Rust toolchains`](https://rust-lang.github.io/rustup/concepts/toolchains.html) for more details about Rust channels.
 
@@ -80,25 +81,52 @@ RUST_BACKTRACE=full
 RUST_LOG=warn
 ```
 
+If the `RustConfig` file exists but is empty, it will be ignored.
+Otherwise, you may specify as many `cargo` environment variables as needed.
+
 ***WARNING***<br>
 Do not set your own value for `CARGO_TARGET_DIR` as the buildpack's `finalize` phase defines its own value for this variable.
 
-See [Rust Environment Variables](https://doc.rust-lang.org/cargo/reference/environment-variables.html) for more details.
-
-The `RustConfig` file may also contain additional variables used by this buildpack:
+`RustConfig` may also contain additional variables used by this buildpack:
 
 | `RustConfig` Variable | Default Value | Description
 |---|---|---
 | `RUST_CARGO_BUILD_PROFILE` | `"release"` | Rust build profile
 | `RUST_CARGO_BUILD_FLAGS` | `""` | Optional build flags.<br>For example `"--features feature1 feature2"`
 
-The `cargo build` command will then be issued using the pattern:
+See [Rust Environment Variables](https://doc.rust-lang.org/cargo/reference/environment-variables.html) for more details.
 
-```sh
-cargo build --$RUST_CARGO_BUILD_PROFILE $RUST_CARGO_BUILD_FLAGS
+### Build Profiles
+For all build profiles other than `release`, it is good practice to add an explicit profile definition in `Cargo.toml`; for example:
+
+```toml
+[profile.my_dev]
+opt-level = 1
+debug = true
+debug-assertions = true
+overflow-checks = true
+lto = false
+panic = 'unwind'
+incremental = true
+codegen-units = 256
+rpath = false
 ```
 
-Therefore, although is would be possible to specify the Rust build profile in `RUST_CARGO_BUILD_FLAGS`, this should not be done as it will create a conflicted set of arguments and `cargo` will fail.
+Then add the line `RUST_CARGO_BUILD_PROFILE=my_dev` to `RustConfig`.
+
+### Build Command
+
+If `$RUST_CARGO_BUILD_PROFILE == release`, then the follow build command is used:
+
+```sh
+cargo build --release $RUST_CARGO_BUILD_FLAGS
+```
+
+For any other value of `$RUST_CARGO_BUILD_PROFILE`, this command will be used:
+
+```sh
+cargo build --profile $RUST_CARGO_BUILD_PROFILE $RUST_CARGO_BUILD_FLAGS
+```
 
 ## Testing with Docker
 
