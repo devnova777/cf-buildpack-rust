@@ -31,6 +31,7 @@ if [ -f "$BUILD_DIR/$CONFIG_FILE" ]
 then
   if [ -s "$BUILD_DIR/$CONFIG_FILE" ]
   then
+    printf "%s Using cargo variables from configuration file %s\n" "$PHASE_STEP" "$CONFIG_FILE"
     cat "$BUILD_DIR/$CONFIG_FILE"
     . "$BUILD_DIR/$CONFIG_FILE"
   else
