@@ -42,7 +42,7 @@ cd "$BUILD_DIR"
 export CARGO_TARGET_DIR="$CACHE_DIR/target"
 
 # Build the project then copy the binary from the cache back to the source tree
-printf  "-----> Building application: cargo build --%s %s\n" "$RUST_CARGO_BUILD_PROFILE" "$RUST_CARGO_BUILD_FLAGS"
+printf  "%s Building application: cargo build --%s %s\n" '----->' $RUST_CARGO_BUILD_PROFILE $RUST_CARGO_BUILD_FLAGS
 
 if [ -z "${RUST_CARGO_BUILD_FLAGS}" ]
 then
