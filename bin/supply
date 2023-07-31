@@ -20,7 +20,7 @@ then
   then
     VERSION="$(cat "$BUILD_DIR/$CONFIG_FILE")"
   else
-    printf "-----> Ignoring empty toolchain configuration file %s\n" $CONFIG_FILE
+    echo "-----> Ignoring empty toolchain configuration file $CONFIG_FILE"
   fi
 fi
 
