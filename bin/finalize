@@ -1,16 +1,19 @@
 #!/usr/bin/env bash
 # usage: bin/finalize <build-dir> <cache-dir> <env-dir>
 
+# Throw toys out of pram if any command fails or a variable is unset
+set -eu
+
 BUILD_DIR=${1:-}
 CACHE_DIR=${2:-}
 # ENV_DIR=${3:-}
 
 CONFIG_FILE=RustConfig
+ENTER_PHASE='----->'
+PHASE_STEP=' . . .'
+EXIT_PHASE='<-----'
 
-# Throw toys out of pram if any command fails or a variable is unset
-set -eu
-
-echo "-----> Start finalize"
+printf "%s Start finalize\n" $ENTER_PHASE
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Rust Build Settings
@@ -26,7 +29,13 @@ RUST_CARGO_BUILD_FLAGS=""
 # Import any cargo specific environment variables if present
 if [ -f "$BUILD_DIR/$CONFIG_FILE" ]
 then
-  . "$BUILD_DIR/$CONFIG_FILE"
+  if [ -s "$BUILD_DIR/$CONFIG_FILE" ]
+  then
+    printf "%s Ignoring empty configuration file %s\n" "$PHASE_STEP" "$CONFIG_FILE"
+  else
+    cat "$BUILD_DIR/$CONFIG_FILE"
+    . "$BUILD_DIR/$CONFIG_FILE"
+  fi
 fi
 
 # Write final target directory to the target_bin_dir file
@@ -41,8 +50,8 @@ cd "$BUILD_DIR"
 # Direct the Rust compiler output to the cache
 export CARGO_TARGET_DIR="$CACHE_DIR/target"
 
-# Build the project then copy the binary from the cache back to the source tree
-printf  "%s Building application: cargo build --%s %s\n" '----->' $RUST_CARGO_BUILD_PROFILE $RUST_CARGO_BUILD_FLAGS
+# Build the project
+printf  "%s Building application: cargo build --%s %s\n" "$PHASE_STEP" "$RUST_CARGO_BUILD_PROFILE" "$RUST_CARGO_BUILD_FLAGS"
 
 if [ -z "${RUST_CARGO_BUILD_FLAGS}" ]
 then
@@ -58,4 +67,4 @@ find "$CARGO_TARGET_DIR/$RUST_CARGO_BUILD_PROFILE" -maxdepth 1 -type f -executab
 # macos version of find command for local testing only
 # find "$CARGO_TARGET_DIR/$RUST_CARGO_BUILD_PROFILE" -maxdepth 1 -type f -perm +111 -exec cp -a {} target/"$RUST_CARGO_BUILD_PROFILE" \;
 
-echo "<----- End finalize"
+printf "%s End finalize\n" "$EXIT_PHASE"

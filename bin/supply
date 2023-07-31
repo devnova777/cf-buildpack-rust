@@ -5,8 +5,12 @@ BUILD_DIR=${1:-}
 # CACHE_DIR=${2:-}
 # ENV_DIR=${3:-}
 
-echo "-----> Start supply"
 CONFIG_FILE=RustToolchain
+ENTER_PHASE='----->'
+PHASE_STEP=' . . .'
+EXIT_PHASE='<-----'
+
+printf "%s Start supply\n" $ENTER_PHASE
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Install/Update Rust toolchain
@@ -20,26 +24,27 @@ then
   then
     VERSION="$(cat "$BUILD_DIR/$CONFIG_FILE")"
   else
-    echo "-----> Ignoring empty toolchain configuration file $CONFIG_FILE"
+    printf "%s Ignoring empty toolchain configuration file %s\n" "$PHASE_STEP" $CONFIG_FILE
   fi
 fi
 
-echo "-----> Using Rust $VERSION channel"
+printf "%s Using Rust %s channel\n" "$PHASE_STEP" "$VERSION"
 
 if command -v rustup &> /dev/null
 then
   # It's possible that $VERSION has changed or been updated since Rust was installed in this container
-  echo "-----> Checking for new releases of Rust $VERSION channel"
+  printf "%s Checking for possible updates to RUST %s channel\n" "$PHASE_STEP" "$VERSION"
   rustup self update
   rustup update "$VERSION"
   rustup default "$VERSION"
 else
-  echo "-----> Downloading rustup"
+  printf "%s Downloading rustup\n" "$PHASE_STEP"
   curl https://sh.rustup.rs -sSf > rustup.sh
   chmod u+x rustup.sh
-  echo "-----> Installing Rust $VERSION channel"
+
+  printf "%s Installing RUST %s channel\n" "$PHASE_STEP" "$VERSION"
   ./rustup.sh -y --default-toolchain "$VERSION"
   rm rustup.sh
 fi
 
-echo "<----- End supply"
+printf "%s End supply\n" $EXIT_PHASE
