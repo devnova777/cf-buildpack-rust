@@ -41,11 +41,10 @@ cd "$BUILD_DIR"
 # Direct the Rust compiler output to the cache
 export CARGO_TARGET_DIR="$CACHE_DIR/target"
 
-echo "-----> Building application using Cargo"
-echo "----->        Build Directory = $BUILD_DIR"
-echo "-----> Cargo Target Directory = $CARGO_TARGET_DIR"
-
 # Build the project then copy the binary from the cache back to the source tree
+echo   "-----> Building application"
+printf "       cargo build --%s %s\n" "$RUST_CARGO_BUILD_PROFILE" "$RUST_CARGO_BUILD_FLAGS"
+
 if [ -z "${RUST_CARGO_BUILD_FLAGS}" ]
 then
   cargo build --"$RUST_CARGO_BUILD_PROFILE"
@@ -53,13 +52,11 @@ else
   cargo build --"$RUST_CARGO_BUILD_PROFILE" "$RUST_CARGO_BUILD_FLAGS"
 fi
 
+# Copy the binary from the cache back to the expected target directory
 mkdir -p target/"$RUST_CARGO_BUILD_PROFILE"
+find "$CARGO_TARGET_DIR/$RUST_CARGO_BUILD_PROFILE" -maxdepth 1 -type f -executable -exec cp -a -t target/"$RUST_CARGO_BUILD_PROFILE" {} \;
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # macos version of find command for local testing only
 # find "$CARGO_TARGET_DIR/$RUST_CARGO_BUILD_PROFILE" -maxdepth 1 -type f -perm +111 -exec cp -a {} target/"$RUST_CARGO_BUILD_PROFILE" \;
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-find "$CARGO_TARGET_DIR/$RUST_CARGO_BUILD_PROFILE" -maxdepth 1 -type f -executable -exec cp -a -t target/"$RUST_CARGO_BUILD_PROFILE" {} \;
 
 echo "<----- End finalize"
