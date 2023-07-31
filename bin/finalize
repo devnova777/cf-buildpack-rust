@@ -56,9 +56,9 @@ printf  "%s Building application: cargo build --%s %s\n" "$PHASE_STEP" "$RUST_CA
 
 if [ -z "${RUST_CARGO_BUILD_FLAGS}" ]
 then
-  cargo build --"$RUST_CARGO_BUILD_PROFILE"
+  cargo build --profile "$RUST_CARGO_BUILD_PROFILE"
 else
-  cargo build --"$RUST_CARGO_BUILD_PROFILE" "$RUST_CARGO_BUILD_FLAGS"
+  cargo build --profile "$RUST_CARGO_BUILD_PROFILE" "$RUST_CARGO_BUILD_FLAGS"
 fi
 
 # Copy the binary from the cache back to the expected target directory
