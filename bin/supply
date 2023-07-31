@@ -9,6 +9,8 @@ CONFIG_FILE=RustToolchain
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 VERSION=stable
 
+ls -al "$BUILD_DIR"
+
 # Import the toolchain configuration if present
 if [ -f "$BUILD_DIR/$CONFIG_FILE" ]
 then
