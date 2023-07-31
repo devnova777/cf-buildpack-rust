@@ -10,7 +10,7 @@ CACHE_DIR=${2:-}
 
 CONFIG_FILE=RustConfig
 ENTER_PHASE='----->'
-PHASE_STEP=' . . .'
+PHASE_STEP='......'
 EXIT_PHASE='<-----'
 
 printf "%s Start finalize\n" $ENTER_PHASE
@@ -31,10 +31,10 @@ if [ -f "$BUILD_DIR/$CONFIG_FILE" ]
 then
   if [ -s "$BUILD_DIR/$CONFIG_FILE" ]
   then
-    printf "%s Ignoring empty configuration file %s\n" "$PHASE_STEP" "$CONFIG_FILE"
-  else
     cat "$BUILD_DIR/$CONFIG_FILE"
     . "$BUILD_DIR/$CONFIG_FILE"
+  else
+    printf "%s Ignoring empty configuration file %s\n" "$PHASE_STEP" "$CONFIG_FILE"
   fi
 fi
 
