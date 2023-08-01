@@ -6,11 +6,12 @@ BUILD_DIR=${1:-}
 # ENV_DIR=${3:-}
 
 CONFIG_FILE=RustToolchain
-ENTER_PHASE='----->'
+PHASE_NAME=supply
+PHASE_ENTER='----->'
 PHASE_STEP='......'
-EXIT_PHASE='<-----'
+PHASE_EXIT='<-----'
 
-printf "%s Start supply\n" $ENTER_PHASE
+printf "%s Start %s\n" $PHASE_ENTER $PHASE_NAME
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Install/Update Rust toolchain
@@ -47,4 +48,4 @@ else
   rm rustup.sh
 fi
 
-printf "%s End supply\n" $EXIT_PHASE
+printf "%s End %s\n" $PHASE_EXIT $PHASE_NAME
