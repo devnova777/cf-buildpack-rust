@@ -85,6 +85,8 @@ fi
 mkdir -p target/"$TARGET_BIN_DIR"
 find "$CARGO_TARGET_DIR/$TARGET_BIN_DIR" -maxdepth 1 -type f -executable -exec cp -a -t target/"$TARGET_BIN_DIR" {} \;
 
+ls -al "$CARGO_TARGET_DIR/$TARGET_BIN_DIR"
+
 # macos version of find command for local testing only
 # find "$CARGO_TARGET_DIR/$TARGET_BIN_DIR" -maxdepth 1 -type f -perm +111 -exec cp -a {} target/"$TARGET_BIN_DIR" \;
 
