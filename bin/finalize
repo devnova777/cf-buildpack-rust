@@ -9,11 +9,12 @@ CACHE_DIR=${2:-}
 # ENV_DIR=${3:-}
 
 CONFIG_FILE=RustConfig
-ENTER_PHASE='----->'
+PHASE_NAME=finalize
+PHASE_ENTER='----->'
 PHASE_STEP='......'
-EXIT_PHASE='<-----'
+PHASE_EXIT='<-----'
 
-printf "%s Start finalize\n" $ENTER_PHASE
+printf "%s Start %s\n" $PHASE_ENTER $PHASE_NAME
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Rust Build Settings
@@ -66,7 +67,7 @@ printf  "%s Building application: cargo build %s %s\n" "$PHASE_STEP" "$CARGO_PRO
 
 if [ -z "${RUST_CARGO_BUILD_FLAGS}" ]
 then
-  # Do not enclose the argument variables in double quotes - we need word splitting here!
+  # Do not enclose CARGO_PROFILE_ARG in double quotes - we need word splitting here!
   # shellcheck disable=SC2086
   cargo build $CARGO_PROFILE_ARG
 else
@@ -81,4 +82,4 @@ find "$CARGO_TARGET_DIR/$TARGET_BIN_DIR" -maxdepth 1 -type f -executable -exec c
 # macos version of find command for local testing only
 # find "$CARGO_TARGET_DIR/$TARGET_BIN_DIR" -maxdepth 1 -type f -perm +111 -exec cp -a {} target/"$RUST_CARGO_BUILD_PROFILE" \;
 
-printf "%s End finalize\n" "$EXIT_PHASE"
+printf "%s End %s\n" $PHASE_EXIT $PHASE_NAME
