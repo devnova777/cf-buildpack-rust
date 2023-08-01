@@ -9,10 +9,16 @@ CACHE_DIR=${2:-}
 # ENV_DIR=${3:-}
 
 CONFIG_FILE=RustConfig
+LOG_BUILD_PHASES=CFLogBuildPhases
 PHASE_NAME=finalize
 
-# Import logging functions
-. "$(dirname $0)/log_utils"
+# Determine if build phase logging should be switched on
+if [ -f "$BUILD_DIR/$LOG_BUILD_PHASES" ]
+then
+  . "$(dirname $0)/log_utils"
+else
+  . "$(dirname $0)/log_utils_noop"
+fi
 
 log_build_phase_enter $PHASE_NAME
 
