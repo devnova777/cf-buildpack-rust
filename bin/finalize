@@ -10,11 +10,12 @@ CACHE_DIR=${2:-}
 
 CONFIG_FILE=RustConfig
 PHASE_NAME=finalize
-PHASE_ENTER='----->'
-PHASE_STEP='......'
-PHASE_EXIT='<-----'
 
-printf "%s Start %s\n" $PHASE_ENTER $PHASE_NAME
+# Import logging functions
+printf "pwd = %s" pwd
+. ./bin/log_utils
+
+log_build_phase_enter $PHASE_NAME
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Rust Build Settings
@@ -32,11 +33,11 @@ if [ -f "$BUILD_DIR/$CONFIG_FILE" ]
 then
   if [ -s "$BUILD_DIR/$CONFIG_FILE" ]
   then
-    printf "%s Using cargo variables from configuration file %s\n" "$PHASE_STEP" "$CONFIG_FILE"
+    log_build_phase_step 'Using cargo variables from configuration file %s\n' $CONFIG_FILE
     cat "$BUILD_DIR/$CONFIG_FILE"
     . "$BUILD_DIR/$CONFIG_FILE"
   else
-    printf "%s Ignoring empty configuration file %s\n" "$PHASE_STEP" "$CONFIG_FILE"
+    log_build_phase_step 'Ignoring empty configuration file %s\n' $CONFIG_FILE
   fi
 fi
 
@@ -63,7 +64,7 @@ then
 fi
 
 # Build the project
-printf  "%s Building application: cargo build %s %s\n" "$PHASE_STEP" "$CARGO_PROFILE_ARG" "$RUST_CARGO_BUILD_FLAGS"
+log_build_phase_step 'Building application: cargo build %s %s\n' "$CARGO_PROFILE_ARG" "$RUST_CARGO_BUILD_FLAGS"
 
 if [ -z "${RUST_CARGO_BUILD_FLAGS}" ]
 then
@@ -82,4 +83,4 @@ find "$CARGO_TARGET_DIR/$TARGET_BIN_DIR" -maxdepth 1 -type f -executable -exec c
 # macos version of find command for local testing only
 # find "$CARGO_TARGET_DIR/$TARGET_BIN_DIR" -maxdepth 1 -type f -perm +111 -exec cp -a {} target/"$RUST_CARGO_BUILD_PROFILE" \;
 
-printf "%s End %s\n" $PHASE_EXIT $PHASE_NAME
+log_build_phase_exit $PHASE_NAME
