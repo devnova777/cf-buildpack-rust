@@ -60,12 +60,10 @@ export CARGO_TARGET_DIR="$CACHE_DIR/target"
 
 # Use the correct profile arg format
 CARGO_PROFILE_ARG="--release"
-TARGET_BIN_DIR="release"
 
 if [ "$RUST_CARGO_BUILD_PROFILE" != "release" ]
 then
   CARGO_PROFILE_ARG="--profile $RUST_CARGO_BUILD_PROFILE"
-  TARGET_BIN_DIR=debug
 fi
 
 # Build the project
@@ -81,18 +79,18 @@ else
   cargo build $CARGO_PROFILE_ARG $RUST_CARGO_BUILD_FLAGS
 fi
 
-ls -al "$CARGO_TARGET_DIR"
+ls -al "$CARGO_TARGET_DIR/$RUST_CARGO_BUILD_PROFILE"
 
 # Copy the binary from the cache back to the expected target directory
-mkdir -p target/"$TARGET_BIN_DIR"
-find "$CARGO_TARGET_DIR/$TARGET_BIN_DIR" -maxdepth 1 -type f -executable -exec cp -a -t target/"$TARGET_BIN_DIR" {} \;
+mkdir -p target/"$RUST_CARGO_BUILD_PROFILE"
+find "$CARGO_TARGET_DIR/$RUST_CARGO_BUILD_PROFILE" -maxdepth 1 -type f -executable -exec cp -a -t "target/$RUST_CARGO_BUILD_PROFILE" {} \;
 
 # macos version of find command for local testing only
-# find "$CARGO_TARGET_DIR/$TARGET_BIN_DIR" -maxdepth 1 -type f -perm +111 -exec cp -a {} target/"$TARGET_BIN_DIR" \;
+# find "$CARGO_TARGET_DIR/$RUST_CARGO_BUILD_PROFILE" -maxdepth 1 -type f -perm +111 -exec cp -a {} "target/$RUST_CARGO_BUILD_PROFILE" \;
 
-# Write final target directory to the target_bin_dir file
+# Write final target directory to the file target_bin_dir
 # The release script can then discover the path to the executable by reading this file
-echo target/$TARGET_BIN_DIR > "$BUILD_DIR/target_bin_dir"
+echo "target/$RUST_CARGO_BUILD_PROFILE" > "$BUILD_DIR/target_bin_dir"
 
 log_build_phase_step 'Copied binary into %s\n' "$PWD/target/$RUST_CARGO_BUILD_PROFILE"
 log_directory "$PWD/target/$RUST_CARGO_BUILD_PROFILE"
