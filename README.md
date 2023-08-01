@@ -14,12 +14,14 @@ Adding configuration to `Cargo.toml` that causes `cargo build` to create multipl
 
 ## Build Phases
 
-This buildpack uses all 4 standard phases:
+This buildpack uses the 4 standard build phases:
 
-1. `detect`<br>If the file `Cargo.toml` exists in the build directory, the string `Rust` is returned with an exit code of `0`, else exit code `1` is returned and no further build phases are performed.
-1. `supply`<br>Installs or updates the version of the Rust toolchain defined in file `RustToolchain`.<br>If this file is missing, the default value of `stable` is used.
-1. `finalize`<br>Runs `cargo build` using any additional build settings found in the file `RustConfig`.<br>If this file is missing or empty, it simply runs `cargo build --release`
-1. `release`<br>Returns a YAML string that points Cloud Foundry to the compiled binary.
+| Build Phase | Purpose | Outcome | Logging Possible?
+|---|---|---|---
+| `detect` | Determine whether or not this buildpack can build an application from the supplied files | If `Cargo.toml` exists in the build directory, the string `Rust` is returned with an exit code of `0`, else exit code `1` is returned and no further build phases are performed | NO
+| `supply` | Installs any prerequiste tools, languages or framworks etc. | The configured Rust toolchain is installed | YES
+| `finalize` | Compile the Rust application using any build settings found in the file `RustConfig`.<br>If this file is missing or empty, it simply runs `cargo build --release` | An executable binary | YES
+| `release` | Point Cloud Foundry to the compiled binary | A YAML string | NO
 
 ## Usage
 
@@ -127,6 +129,14 @@ For any other value of `$RUST_CARGO_BUILD_PROFILE`, this command will be used:
 ```sh
 cargo build --profile $RUST_CARGO_BUILD_PROFILE $RUST_CARGO_BUILD_FLAGS
 ```
+
+## Build Phase Logging
+
+Logging is possible for both the entry and exit into the build phases `supply` and `finalize`, and the internal steps within these build phases.
+
+Normally, such logging is switched off, but if you wish to see more detailed logging messages, then create a file called `CFLogBuildPhases` in the same directory as your top level `Cargo.toml`.
+
+To switch logging on, this file simply needs to exists &mdash; any content it might contain is ignored.
 
 ## Testing with Docker
 
