@@ -79,8 +79,6 @@ else
   cargo build $CARGO_PROFILE_ARG $RUST_CARGO_BUILD_FLAGS
 fi
 
-ls -al "$CARGO_TARGET_DIR/$RUST_CARGO_BUILD_PROFILE"
-
 # Copy the binary from the cache back to the expected target directory
 mkdir -p target/"$RUST_CARGO_BUILD_PROFILE"
 find "$CARGO_TARGET_DIR/$RUST_CARGO_BUILD_PROFILE" -maxdepth 1 -type f -executable -exec cp -a -t "target/$RUST_CARGO_BUILD_PROFILE" {} \;
