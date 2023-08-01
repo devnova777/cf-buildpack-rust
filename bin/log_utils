@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Logging utility functions
+
+log_build_phase_enter() {
+  printf "%s Entering build phase %s\n" "----->" "$1"
+}
+
+log_build_phase_step() {
+  printf '...... '
+  # shellcheck disable=SC2059
+  printf "$@"
+}
+
+log_build_phase_exit() {
+  printf "%s Exiting build phase %s\n" "<-----" "$1"
+}
