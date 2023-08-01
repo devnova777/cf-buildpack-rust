@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# No-op versions of logging utility functions
+
+log_build_phase_enter() { true; }
+log_build_phase_step()  { true; }
+log_build_phase_exit()  { true; }
