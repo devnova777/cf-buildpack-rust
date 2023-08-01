@@ -109,6 +109,7 @@ For all build profiles other than `release`, it is good practice to add an expli
 
 ```toml
 [profile.my_dev]
+inherit = "release"
 opt-level = 1
 debug = true
 debug-assertions = true

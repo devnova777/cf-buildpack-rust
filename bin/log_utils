@@ -23,6 +23,7 @@ log_build_phase_step() {
 }
 
 log_directory() {
+  printf "ls -al %s" "$1"
   ls -al "$1"
 }
 
