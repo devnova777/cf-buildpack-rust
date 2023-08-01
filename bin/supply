@@ -9,7 +9,7 @@ CONFIG_FILE=RustToolchain
 PHASE_NAME=supply
 
 # Import logging functions
-. "$(dirname)/bin/log_utils"
+. "$(dirname $0)/bin/log_utils"
 
 log_build_phase_enter $PHASE_NAME
 
