@@ -47,7 +47,7 @@ then
     log_build_phase_step 'Ignoring empty configuration file %s\n' $CONFIG_FILE
   fi
 else
-  log_build_phase_step 'Configuration file %s not found.\n' $CONFIG_FILE
+  log_build_phase_step 'Configuration file %s not found\n' $CONFIG_FILE
 fi
 
 # Write final target directory to the target_bin_dir file
@@ -93,4 +93,5 @@ find "$CARGO_TARGET_DIR/$TARGET_BIN_DIR" -maxdepth 1 -type f -executable -exec c
 # find "$CARGO_TARGET_DIR/$TARGET_BIN_DIR" -maxdepth 1 -type f -perm +111 -exec cp -a {} target/"$RUST_CARGO_BUILD_PROFILE" \;
 
 log_build_phase_step 'Copied binary into %s\n' "$PWD/target/$RUST_CARGO_BUILD_PROFILE"
+log_directory "$PWD/target/$RUST_CARGO_BUILD_PROFILE"
 log_build_phase_exit $PHASE_NAME
