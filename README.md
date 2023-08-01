@@ -124,7 +124,7 @@ Then add the line `RUST_CARGO_BUILD_PROFILE=my_dev` to `RustConfig`.
 
 ### Build Command
 
-If `$RUST_CARGO_BUILD_PROFILE == release`, then the follow build command is used:
+If `$RUST_CARGO_BUILD_PROFILE == release`, then the following build command will be used:
 
 ```sh
 cargo build --release $RUST_CARGO_BUILD_FLAGS
