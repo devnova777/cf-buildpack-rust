@@ -50,10 +50,6 @@ else
   log_build_phase_step 'Configuration file %s not found\n' $CONFIG_FILE
 fi
 
-# Write final target directory to the target_bin_dir file
-# The release script can then discover the path to the executable by reading this file
-echo target/$RUST_CARGO_BUILD_PROFILE > "$BUILD_DIR/target_bin_dir"
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Start the build process
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -86,11 +82,15 @@ else
 fi
 
 # Copy the binary from the cache back to the expected target directory
-mkdir -p target/"$RUST_CARGO_BUILD_PROFILE"
-find "$CARGO_TARGET_DIR/$TARGET_BIN_DIR" -maxdepth 1 -type f -executable -exec cp -a -t target/"$RUST_CARGO_BUILD_PROFILE" {} \;
+mkdir -p target/"$TARGET_BIN_DIR"
+find "$CARGO_TARGET_DIR/$TARGET_BIN_DIR" -maxdepth 1 -type f -executable -exec cp -a -t target/"$TARGET_BIN_DIR" {} \;
 
 # macos version of find command for local testing only
-# find "$CARGO_TARGET_DIR/$TARGET_BIN_DIR" -maxdepth 1 -type f -perm +111 -exec cp -a {} target/"$RUST_CARGO_BUILD_PROFILE" \;
+# find "$CARGO_TARGET_DIR/$TARGET_BIN_DIR" -maxdepth 1 -type f -perm +111 -exec cp -a {} target/"$TARGET_BIN_DIR" \;
+
+# Write final target directory to the target_bin_dir file
+# The release script can then discover the path to the executable by reading this file
+echo target/$TARGET_BIN_DIR > "$BUILD_DIR/target_bin_dir"
 
 log_build_phase_step 'Copied binary into %s\n' "$PWD/target/$RUST_CARGO_BUILD_PROFILE"
 log_directory "$PWD/target/$RUST_CARGO_BUILD_PROFILE"
