@@ -81,11 +81,11 @@ else
   cargo build $CARGO_PROFILE_ARG $RUST_CARGO_BUILD_FLAGS
 fi
 
+ls -al "$CARGO_TARGET_DIR"
+
 # Copy the binary from the cache back to the expected target directory
 mkdir -p target/"$TARGET_BIN_DIR"
 find "$CARGO_TARGET_DIR/$TARGET_BIN_DIR" -maxdepth 1 -type f -executable -exec cp -a -t target/"$TARGET_BIN_DIR" {} \;
-
-ls -al "$CARGO_TARGET_DIR/$TARGET_BIN_DIR"
 
 # macos version of find command for local testing only
 # find "$CARGO_TARGET_DIR/$TARGET_BIN_DIR" -maxdepth 1 -type f -perm +111 -exec cp -a {} target/"$TARGET_BIN_DIR" \;
