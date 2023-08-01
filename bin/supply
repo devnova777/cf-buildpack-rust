@@ -6,10 +6,16 @@ BUILD_DIR=${1:-}
 # ENV_DIR=${3:-}
 
 CONFIG_FILE=RustToolchain
+LOG_BUILD_PHASES=CFLogBuildPhases
 PHASE_NAME=supply
 
-# Import logging functions
-. "$(dirname $0)/log_utils"
+# Determine if build phase logging should be switched on
+if [ -f "$BUILD_DIR/$LOG_BUILD_PHASES" ]
+then
+  . "$(dirname $0)/log_utils"
+else
+  . "$(dirname $0)/log_utils_noop"
+fi
 
 log_build_phase_enter $PHASE_NAME
 
@@ -29,12 +35,10 @@ then
   fi
 fi
 
-log_build_phase_step 'Using Rust %s channel\n' "$VERSION"
-
 if command -v rustup &> /dev/null
 then
   # It's possible that $VERSION has changed or been updated since Rust was installed in this container
-  log_build_phase_step 'Checking for possible updates to RUST %s channel\n' "$VERSION"
+  log_build_phase_step 'Checking for possible updates to Rust %s channel\n' "$VERSION"
   rustup self update
   rustup update "$VERSION"
   rustup default "$VERSION"
@@ -43,7 +47,7 @@ else
   curl https://sh.rustup.rs -sSf > rustup.sh
   chmod u+x rustup.sh
 
-  log_build_phase_step 'Installing RUST %s channel\n' "$VERSION"
+  log_build_phase_step 'Installing Rust %s channel\n' "$VERSION"
   ./rustup.sh -y --default-toolchain "$VERSION"
   rm rustup.sh
 fi
