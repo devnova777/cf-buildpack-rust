@@ -9,8 +9,8 @@ CONFIG_FILE=RustToolchain
 PHASE_NAME=supply
 
 # Import logging functions
-printf "pwd = %s\n" pwd
-. ./bin/log_utils
+printf "pwd = %s\n" "$PWD"
+. "$PWD/bin/log_utils"
 
 log_build_phase_enter $PHASE_NAME
 
