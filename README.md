@@ -136,7 +136,7 @@ Logging is possible for both the entry and exit into the build phases `supply` a
 
 Normally, such logging is switched off, but if you wish to see more detailed logging messages, then create a file called `CFLogBuildPhases` in the same directory as your top level `Cargo.toml`.
 
-To switch logging on, this file simply needs to exists &mdash; any content it might contain is ignored.
+To switch logging on, this file simply needs to exist &mdash; its contents are never read.
 
 ## Testing with Docker
 

@@ -1,10 +1,21 @@
 #!/usr/bin/env bash
-# Logging utility functions
 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Logging utility functions
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 log_build_phase_enter() {
   printf "%s Entering build phase %s\n" "----->" "$1"
 }
 
+# Since this function is simply a frontend to `printf`, it can take a variable number of arguments
+#
+# The first argumemnt therefore is the `printf` format string, and if present, the 2nd - n'th arguments are the values
+# being substituted
+#
+# The caller must enclose the first argument in single quotes to ensure that no variable substituion occurs
+#
+# Do this:   log_build_phase_step 'Configuration file %s not found\n' $CONFIG_FILE
+# Not this:  log_build_phase_step "Configuration file %s not found\n" $CONFIG_FILE
 log_build_phase_step() {
   printf '...... '
   # shellcheck disable=SC2059
