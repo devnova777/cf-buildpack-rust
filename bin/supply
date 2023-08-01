@@ -36,15 +36,15 @@ then
     log_build_phase_step 'Ignoring empty configuration file %s\n' $CONFIG_FILE
   fi
 else
-  log_build_phase_step 'Configuration file %s not found.\n' $CONFIG_FILE
+  log_build_phase_step 'Configuration file %s not found\n' $CONFIG_FILE
 fi
 
-log_build_phase_step 'Using Rust %s channel.\n' "$VERSION"
+log_build_phase_step 'Using Rust %s channel\n' "$VERSION"
 
 if command -v rustup &> /dev/null
 then
   # It's possible that $VERSION has changed or been updated since Rust was installed in this container
-  log_build_phase_step 'Rust already installed - checking for updates.\n'
+  log_build_phase_step 'Rust already installed - checking for updates\n'
   rustup self update
   rustup update "$VERSION"
   rustup default "$VERSION"

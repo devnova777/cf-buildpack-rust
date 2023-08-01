@@ -3,4 +3,5 @@
 
 log_build_phase_enter() { true; }
 log_build_phase_step()  { true; }
+log_directory()         { true; }
 log_build_phase_exit()  { true; }
