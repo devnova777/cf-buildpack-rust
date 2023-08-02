@@ -145,7 +145,7 @@ This buildpack uses the 4 standard build phases:
 
 | Build Phase | Purpose | Outcome | Logging Possible?
 |---|---|---|---
-| `detect` | Determine whether or not this buildpack can build an application from the supplied files | If `Cargo.toml` exists in the build directory, the string `Rust` is returned with an exit code of `0`, else exit code `1` is returned and no further build phases are performed | NO
+| `detect` | Determine whether or not a Rust application can be built from the supplied files | The build directory must contain the file `Cargo.toml`.<br>If this file can be found, the string `Rust` is returned with an exit code of `0`, else exit code `1` is returned and no further build phases are performed | NO
 | `supply` | Installs any prerequiste tools, languages or frameworks etc. | The configured Rust toolchain is installed | YES
 | `finalize` | Compile the Rust application using any build settings found in `RustConfig`.<br>If this file is missing or empty, it simply runs `cargo build --release` | An executable binary | YES
 | `release` | Point Cloud Foundry to the compiled binary | A YAML string | NO
@@ -154,9 +154,10 @@ This buildpack uses the 4 standard build phases:
 
 ## Build Phase Logging
 
-Logging is possible for both the entry and exit into the build phases `supply` and `finalize`, and the internal steps within these build phases.
+Writing messages to the console is only possible for the build phases `supply` and `finalize`.
 
-Normally, this is switched off, but if you wish to see internal logging messages, then create a file called `CFLogBuildPhases` in the same directory as your top level `Cargo.toml`. To switch logging on, this file simply needs to exist &mdash; its contents are never read.
+Normally, logging is switched off, but if your build is failing, or you simply wish to see the progress of the internal steps within these build phases, then create a file called `CFLogBuildPhases` in the same directory as your top level `Cargo.toml`.
+This file simply needs to exist &mdash; its contents are never read.
 
 Deleting `CFLogBuildPhases` switches logging off.
 
