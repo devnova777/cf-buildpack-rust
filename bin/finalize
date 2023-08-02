@@ -29,7 +29,7 @@ log_build_phase_enter $PHASE_NAME
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Ensure that at least CARGO_HOME is set correctly
-  # shellcheck source=/dev/null
+# shellcheck source=/dev/null
 . "$HOME/.cargo/env"
 
 # Default build flags to pass to `cargo build`.
