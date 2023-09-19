@@ -17,6 +17,19 @@ Adding configuration to `Cargo.toml` that causes `cargo build` to create multipl
 ---
 ## Usage
 
+### Create a `.cfignore` file
+
+In your repo's root directory (I.E. the directory from which you run the command `cf push`), create a `.cfignore` file  that contains at least the following two entries:
+
+```
+target
+Cargo.lock
+```
+
+During the execution of `cf push`, it is redundant to copy the contents of either the `target/` directory tree or the file `Cargo.lock`, as these will both be rebuilt.
+
+Without a `.cfignore` file, the `cf push` command will be very slow and may well fail entirely with the very vague error message `Package failed to process correctly after upload`.
+
 ### `manifest.yml`
 
 In the `manifest.yml` of your application, point to this `buildpack` and allocate sufficient memory for compilation to succeed.
