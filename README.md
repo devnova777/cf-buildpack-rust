@@ -40,7 +40,7 @@ applications:
 - name: my-cool-rust-project
   memory: 4096M
   buildpacks:
-  - https://github.com/lighthouse-no/cf-buildpack-rust
+  - https://github.com/ChrisWhealy/cf-buildpack-rust
 ```
 
 ### `Cargo.toml`
@@ -51,7 +51,7 @@ In your application's `Cargo.toml` file, make sure the `name` property is listed
 [package]
 name = "my-cool-rust-app"
 version = "0.1.0"
-authors = ["Chris Whealy <chris@lighthouse.no>"]
+authors = ["Chris Whealy <chris@whealy.com>"]
 edition = "2021"
 
 ```
@@ -182,4 +182,4 @@ Changes to the buildpack can be tested using the included shell script `test-bui
 This uses the standard `rust` Docker image.
 
 -----
-&copy; 2023 Lighthouse Consulting AS
+&copy; 2023 Chris Whealy
