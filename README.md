@@ -40,8 +40,7 @@ applications:
 - name: my-cool-rust-project
   memory: 4096M
   buildpacks:
-  - https://github.com/ChrisWhealy/cf-buildpack-rust
-```
+  -https://github.com/ChrisWhealy/cf-buildpack-rust
 
 ### `Cargo.toml`
 
