@@ -40,7 +40,7 @@ applications:
 - name: my-cool-rust-project
   memory: 4096M
   buildpacks:
-  -https://github.com/ChrisWhealy/cf-buildpack-rust
+  -https://github.com/devnova777/cf-buildpack-rust
 
 ### `Cargo.toml`
 
@@ -181,4 +181,3 @@ Changes to the buildpack can be tested using the included shell script `test-bui
 This uses the standard `rust` Docker image.
 
 -----
-&copy; 2023 Chris Whealy
